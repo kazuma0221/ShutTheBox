@@ -64,7 +64,8 @@ if __name__ == '__main__':
 
         # タイルとダイスの表示
         print(event['TILES'])
-        print(f'DICE: {event["DICE"]} -> {event["DICE_SUM"]}')
+        if not event['GAME_END']:
+            print(f'DICE: {event["DICE"]} -> {event["DICE_SUM"]}')
 
         # 選択肢を表示し、選んでもらう
         marks = [letter for letter, _ in zip('ABCDEF', event['CHOICES'])]
