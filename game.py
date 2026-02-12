@@ -55,17 +55,19 @@ if __name__ == '__main__':
     game.table.inputData = {'choice': (0, 0)}
     inputData = game.table.inputData
 
+    # タイルとダイスを表示する関数
+    def show():
+        print(event['TILES'])
+        if not event['GAME_END']:
+            print(f'DICE: {event["DICE"]} -> {event["DICE_SUM"]}')
+
     # ゲーム終了までプレイ
     while event['EVENT_TYPE'] != ev.GAME_RESULT:
         # 入力待ちでなければ、次のゲーム処理を実行する
         event = game.next()
         if event['EVENT_TYPE'] != ev.USER_TURN:
             continue
-
-        # タイルとダイスの表示
-        print(event['TILES'])
-        if not event['GAME_END']:
-            print(f'DICE: {event["DICE"]} -> {event["DICE_SUM"]}')
+        show()
 
         # 選択肢を表示し、選んでもらう
         marks = [letter for letter, _ in zip('ABCDEF', event['CHOICES'])]
@@ -83,7 +85,6 @@ if __name__ == '__main__':
                 break
 
     # 終了
-    print(event['TILES'])
-    print(f'DICE: {event["DICE"]} -> {event["DICE_SUM"]}')
+    show()
     print(f'SCORE: {event["SCORE"]}')
     print('---------- GAME END ----------')
