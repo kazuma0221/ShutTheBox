@@ -5,6 +5,7 @@ from table import Table
 class ProcStart(ProcStartGameBase):
     '''ゲーム開始処理。タイルのリストを出力用に渡す。'''
     def setEvent(self, table:Table):
+        table.event['SCORE'] = None
         table.event['TILES'] = [str(tile) for tile in table.tiles]
         table.event['GAME_END'] = False
         table.event['EVENT_TYPE'] = ev.START_GAME

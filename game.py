@@ -58,7 +58,8 @@ if __name__ == '__main__':
     # タイルとダイスを表示する関数
     def show():
         print(event['TILES'])
-        if not event['GAME_END']:
+        score = event['SCORE']
+        if score is None or score > 0:
             print(f'DICE: {event["DICE"]} -> {event["DICE_SUM"]}')
 
     # ゲーム終了までプレイ
