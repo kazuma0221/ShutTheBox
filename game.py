@@ -2,10 +2,10 @@ from boardgame.proc import Proc
 from boardgame.game import Game as BaseGame
 
 from table import Table
-from procstart import ProcStart
-from procshut import ProcShut
-from procroll import ProcRoll
-from procend import ProcEnd
+from proc_start import ProcStart
+from proc_shut import ProcShut
+from proc_roll import ProcRoll
+from proc_end import ProcEnd
 
 class Game(BaseGame):
     '''シャット・ザ・ボックスのゲーム手順。'''
