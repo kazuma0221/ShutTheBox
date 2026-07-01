@@ -1,10 +1,11 @@
-from boardgame.procendgame import ProcEndGame as ProcEndGameBase
-from boardgame.eventtype import EventType as ev
+from boardgame.proc_game_end import ProcGameEnd as BaseProc
+from boardgame.event_type import EventType as ev
+from dto import OutputEvent
 from table import Table
 
-class ProcEnd(ProcEndGameBase):
+class ProcEnd(BaseProc):
     '''ゲーム終了処理。残ったタイルから点数を計算して返す。'''
-    def do(self, table:Table)->dict:
+    def do(self, table:Table) -> OutputEvent:
         # 表になっているタイルを逆順に計算する
         score, digit = 0, 0
         for tile in reversed(table.tiles):
@@ -12,9 +13,7 @@ class ProcEnd(ProcEndGameBase):
                 score += tile.value * (10 ** digit)
                 digit += 1
         # 計算結果
-        table.event['SCORE'] = score
-        table.event['EVENT_TYPE'] = ev.GAME_RESULT
-        return table.event
+        return OutputEvent(event_type=ev.GAME_RESULT, tiles=table.get_tiles_str(), score=score)
 
 if __name__ == '__main__':
     import numpy as np

@@ -1,11 +1,13 @@
 from boardgame.proc import Proc
-from boardgame.eventtype import EventType as ev
+from boardgame.event_type import EventType as ev
 from table import Table
+from dto import OutputEvent
 
 class ProcRoll(Proc):
     '''プレイ処理。次のダイスを振り、可能な選択肢を列挙する。'''
-    def do(self, table:Table)->dict:
+    def do(self, table:Table) -> OutputEvent:
         '''残りタイルの値の合計に応じて1個か2個のダイスを振り、選択肢を作って返す。'''
+
         # ダイスを2個振る
         for die in table.dice:
             die.roll()
@@ -15,11 +17,9 @@ class ProcRoll(Proc):
         tile_total = sum([tile.value for tile in table.tiles])
         if tile_total < 7:
             dice.pop(-1)
-        table.event['DICE'] = [die.value for die in dice]
 
         # 合計値
         dice_sum = sum([die.value for die in table.dice])
-        table.event['DICE_SUM'] = dice_sum
 
         # 選択肢を列挙し、使えるものだけを採用
         choices: list[tuple] = [(i, dice_sum - i) for i in range(1, (dice_sum // 2 + 1))]
@@ -36,15 +36,18 @@ class ProcRoll(Proc):
         # 自然数1つ（出目そのもの）
         if dice_sum <= Table.UPPER_LIMIT and table.tiles[dice_sum - 1].isOpen:
             available.append((dice_sum, 0))
-        table.event['CHOICES'] = available
 
-        # 選択肢があれば手番、なければ終了
-        if len(available) > 0:
-            table.event['EVENT_TYPE'] = ev.USER_TURN
+        # 出力
+        # 選択肢がなければ終了、あれば継続
+        if len(available) < 1:
+            event = OutputEvent(event_type=ev.AUTO_MOVE, game_end=True)
         else:
-            table.event['GAME_END'] = True
-            table.event['EVENT_TYPE'] = ev.AUTO_MOVE
-        return table.event
+            event = OutputEvent(event_type=ev.USER_TURN,
+                                tiles=table.get_tiles_str(),
+                                choices=available,
+                                dice=[die.value for die in dice],
+                                dice_sum=dice_sum)
+        return event
 
 # テスト
 if __name__ == '__main__':

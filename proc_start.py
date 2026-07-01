@@ -1,14 +1,12 @@
-from boardgame.procstartgame import ProcStartGame as ProcStartGameBase
-from boardgame.eventtype import EventType as ev
+from boardgame.proc_game_start import ProcGameStart as BaseProc
+from boardgame.event_type import EventType as ev
+from dto import OutputEvent
 from table import Table
 
-class ProcStart(ProcStartGameBase):
+class ProcStart(BaseProc):
     '''ゲーム開始処理。タイルのリストを出力用に渡す。'''
-    def setEvent(self, table:Table):
-        table.event['SCORE'] = None
-        table.event['TILES'] = [str(tile) for tile in table.tiles]
-        table.event['GAME_END'] = False
-        table.event['EVENT_TYPE'] = ev.START_GAME
+    def createEvent(self, table:Table) -> OutputEvent:
+        return OutputEvent(event_type=ev.START_GAME, tiles=table.get_tiles_str())
 
 # テスト
 if __name__ == '__main__':

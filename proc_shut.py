@@ -1,20 +1,18 @@
 from boardgame.proc import Proc
-from boardgame.eventtype import EventType as ev
+from boardgame.event_type import EventType as ev
 from table import Table
+from dto import OutputEvent
 
 class ProcShut(Proc):
     '''選んだタイルを閉じる処理。'''
-    def do(self, table:Table)->dict:
+    def do(self, table:Table) -> OutputEvent:
         '''選んだタイルを閉じ、更新したタイル一覧を返す。'''
         # タイルを閉じる
-        for i in table.inputData['choice']:
+        for i in table.input_data.choice:
             if i > 0:
                 table.tiles[i - 1].shut()
-        table.event['TILES'] = [str(tile) for tile in table.tiles]
-        # ユーザ選択を完了し、入力データを初期値に戻す
-        table.inputData['choice'] = None
-        table.event['EVENT_TYPE'] = ev.USER_APPROVED
-        return table.event
+        # ユーザ選択を完了する
+        return OutputEvent(event_type=ev.USER_APPROVED, tiles=table.get_tiles_str())
 
 # テスト
 if __name__ == '__main__':
