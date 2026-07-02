@@ -3,10 +3,10 @@ from boardgame.game import Game as BaseGame
 
 from table import Table
 from dto import InputData, OutputEvent
-from proc_start import ProcStart
-from proc_shut import ProcShut
-from proc_roll import ProcRoll
-from proc_end import ProcEnd
+from procs.proc_start import ProcStart
+from procs.proc_shut import ProcShut
+from procs.proc_roll import ProcRoll
+from procs.proc_end import ProcEnd
 
 class Game(BaseGame):
     '''シャット・ザ・ボックスのゲーム手順。'''

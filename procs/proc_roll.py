@@ -19,7 +19,8 @@ class ProcRoll(Proc):
             dice.pop(-1)
 
         # 合計値
-        dice_sum = sum([die.value for die in table.dice])
+        dice_for_output = [die.value for die in dice]
+        dice_sum = sum(dice_for_output)
 
         # 選択肢を列挙し、使えるものだけを採用
         choices: list[tuple] = [(i, dice_sum - i) for i in range(1, (dice_sum // 2 + 1))]
@@ -40,12 +41,15 @@ class ProcRoll(Proc):
         # 出力
         # 選択肢がなければ終了、あれば継続
         if len(available) < 1:
-            event = OutputEvent(event_type=ev.AUTO_MOVE, game_end=True)
+            event = OutputEvent(event_type=ev.AUTO_MOVE,
+                                game_end=True,
+                                dice=dice_for_output,
+                                dice_sum=dice_sum)
         else:
             event = OutputEvent(event_type=ev.USER_TURN,
                                 tiles=table.get_tiles_str(),
                                 choices=available,
-                                dice=[die.value for die in dice],
+                                dice=dice_for_output,
                                 dice_sum=dice_sum)
         return event
 

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from boardgame.dto import InputData as BaseInput, OutputEvent as BaseOutput
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class InputData(BaseInput):
     '''PR層からAP層へ、ゲーム入力を引き渡すためのデータ転送オブジェクト(DTO)。'''
     choice: tuple = None
